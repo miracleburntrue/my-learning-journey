@@ -99,3 +99,5 @@ python3 -m http.server 8080
 - ❌ 构建工具（Vite / Webpack）—— 先感受"零构建"的原生开发体验
 - ❌ CSS 框架（Tailwind / Bootstrap）—— 先手写 CSS 理解盒模型和布局原理
 - ❌ Node.js 后端 —— 先聚焦纯前端，后续章节再引入后端
+
+该项目由Claude code帮助完成

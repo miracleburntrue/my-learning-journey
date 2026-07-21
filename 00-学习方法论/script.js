@@ -147,6 +147,11 @@ const defaultChapters = [
 // localStorage 的键名，用一个常量统一管理，避免各处分写字符串
 const STORAGE_KEY = "learning-progress";
 
+// 数据版本号 —— 当 defaultChapters 内容有改动时，升级版本号
+// 旧版本 localStorage 数据会被自动丢弃，用新的默认数据替换
+// 比如：删除了 Homebrew 任务 → 从 1 升到 2
+const DATA_VERSION = 2;
+
 /**
  * 从 localStorage 加载数据
  * 如果 localStorage 里有数据就用它，没有就用默认数据
@@ -159,8 +164,20 @@ function loadState() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      // JSON.parse：把 JSON 字符串转回 JavaScript 对象
-      return JSON.parse(saved);
+      const data = JSON.parse(saved);
+      // 兼容旧格式：旧数据没有 _version 字段，直接返回 chapters 数组本身
+      // 新格式：{ chapters: [...], _version: N }
+      if (Array.isArray(data)) {
+        // 旧格式（无版本号），丢弃并用默认数据
+        console.info("检测到旧格式数据（无版本号），使用默认数据");
+        return defaultChapters;
+      }
+      // 版本检查：如果 localStorage 里的数据版本和当前代码版本不一致，
+      // 说明数据格式有变动（比如新增/删除任务），丢弃旧数据，使用默认数据。
+      if (data._version === DATA_VERSION) {
+        return data.chapters;
+      }
+      console.info("数据版本不匹配，使用默认数据（旧版本：" + data._version + "，新版本：" + DATA_VERSION + "）");
     }
   } catch (error) {
     console.warn("读取保存的数据失败，使用默认数据：", error);
@@ -177,7 +194,10 @@ function loadState() {
  */
 function saveState(chapters) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(chapters));
+    // 用对象包裹数组，这样可以在同一层存放版本号
+    // JSON.stringify 会忽略数组的非索引属性，所以不能直接把 _version 挂在数组上
+    const data = { chapters: chapters, _version: DATA_VERSION };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
     console.error("保存数据失败：", error);
   }
