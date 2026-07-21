@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--
+  index.html — 学习进度页面
+  这是整个项目的入口文件。
+  技术栈：HTML5 + CSS + JavaScript（无框架）
+  浏览器直接打开此文件即可运行。
+
+  文件分工：
+    - index.html（本文件）：页面骨架
+    - style.css：            页面样式
+    - script.js：            交互逻辑 + 数据管理
+-->
+<html lang="zh-CN">
+<head>
+  <!--
+    charset="UTF-8"：告诉浏览器用 UTF-8 编码解析页面，
+    这样中文才不会乱码。这是 HTML5 标配。
+  -->
+  <meta charset="UTF-8">
+
+  <!--
+    viewport：响应式设计的基础。
+    width=device-width：页面宽度 = 设备屏幕宽度
+    initial-scale=1.0：初始缩放比例 100%
+    没有这行，手机浏览器会默认把页面缩小成桌面版的样子。
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>我的学习进度</title>
+
+  <!-- 引入样式表 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========== 页面容器 ========== -->
+  <div class="page-container">
+
+    <!-- 页面标题 -->
+    <h1 class="page-title">📚 我的学习进度</h1>
+    <p class="page-subtitle">AI Agent 全栈工程师学习之旅</p>
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <button class="btn-reset" id="btn-reset">🔄 重置进度</button>
+    </div>
+
+    <!--
+      章节列表容器 —— 这是"挂载点"。
+      JavaScript 会找到这个 id="app" 的 div，
+      然后把所有章节卡片动态生成并插入到这里。
+
+      为什么不在 HTML 里手写十个章节？
+        因为数据是动态的（从 localStorage 读取），
+        手写 HTML 无法反映保存的状态。
+        所以 HTML 里只放一个空容器，内容由 JS 负责填充。
+    -->
+    <div id="app" class="chapter-list">
+      <!-- 内容由 script.js 动态生成 -->
+    </div>
+
+    <!-- 页脚 -->
+    <p class="page-footer">
+      进度自动保存到浏览器本地存储 &nbsp;|&nbsp; 刷新页面数据不丢失
+    </p>
+
+  </div>
+
+  <!--
+    引入 JavaScript 脚本。
+
+    defer 属性的作用：
+      1. 不阻塞 HTML 解析（后台下载脚本）
+      2. 等 DOM 全部解析完再执行脚本
+      3. 多个 defer 脚本按书写顺序执行
+
+    如果不用 defer，把 <script> 放在 </body> 前也行，
+    但 defer 是更推荐的现代写法——意图更明确。
+  -->
+  <script defer src="script.js"></script>
+
+</body>
+</html>

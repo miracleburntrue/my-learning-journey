@@ -1,0 +1,338 @@
+/* ============================================
+ * style.css — 学习进度页面的样式
+ * 设计思路：卡片式布局，简洁现代，柔和配色
+ * ============================================ */
+
+/* ---------- 1. CSS 变量（自定义属性）----------
+ * 把颜色值定义成变量，好处是后续换主题色只需改这里
+ * 这是现代 CSS 的最佳实践，避免到处改颜色值 */
+:root {
+  --color-bg: #f0f2f5;           /* 页面背景：浅灰 */
+  --color-card: #ffffff;         /* 卡片背景：白色 */
+  --color-text: #2c3e50;         /* 主文字色：深蓝灰 */
+  --color-text-light: #7f8c8d;   /* 次要文字色：灰 */
+  --color-primary: #4CAF50;      /* 主色调：绿色（进度条、复选框） */
+  --color-primary-light: #81C784;/* 主色调浅色版 */
+  --color-danger: #e74c3c;       /* 重置按钮色：红色 */
+  --color-border: #e0e0e0;       /* 边框色 */
+  --color-progress-bg: #e8e8e8;  /* 进度条背景（轨道） */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);  /* 卡片阴影 */
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12); /* hover 时的阴影 */
+  --radius: 12px;                /* 统一圆角大小 */
+}
+
+
+/* ---------- 2. 全局重置 & 基础排版 ----------
+ * box-sizing: border-box 让 padding 和 border 包含在元素宽高内，
+ * 这样设置 width: 100% 时不会因为加了 padding 而溢出。
+ * 这个设置几乎是所有现代项目的标配 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+               "Microsoft YaHei", sans-serif;
+  /* ^ 系统字体栈：优先使用系统自带字体，加载最快、渲染最好 */
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;    /* 行高 1.6 倍，阅读舒适 */
+  min-height: 100vh;   /* 最小高度撑满屏幕 */
+}
+
+
+/* ---------- 3. 页面容器 ---------- */
+.page-container {
+  max-width: 800px;          /* 最大宽度 800px，大屏幕上不会太宽 */
+  margin: 0 auto;            /* 水平居中 */
+  padding: 40px 20px;        /* 上下 40px，左右 20px 留白 */
+}
+
+/* 页面标题 */
+.page-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.page-subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-light);
+  margin-bottom: 32px;
+}
+
+
+/* ---------- 4. 工具栏 ---------- */
+.toolbar {
+  display: flex;
+  justify-content: flex-end;  /* 按钮靠右 */
+  margin-bottom: 16px;
+}
+
+/* 重置按钮 */
+.btn-reset {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: var(--color-text-light);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;           /* 鼠标变成手型，暗示可点击 */
+  transition: all 0.2s;      /* hover 效果过渡 */
+}
+
+.btn-reset:hover {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+
+/* ---------- 5. 章节列表（使用 CSS Grid 布局）---------- */
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;                 /* 卡片之间的间距 */
+}
+
+
+/* ---------- 6. 章节卡片 ---------- */
+.chapter-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;          /* 圆角裁剪子元素，配合 border-radius 使用 */
+  transition: box-shadow 0.3s;
+}
+
+.chapter-card:hover {
+  box-shadow: var(--shadow-hover);  /* 鼠标悬停时阴影加深 */
+}
+
+/* ---------- 7. 章节标题行 ----------
+ * 这是可点击的行，用来展开/收起任务列表
+ * 使用 flexbox 布局让标题、进度、箭头排成一行 */
+.chapter-header {
+  display: flex;
+  align-items: center;       /* 垂直居中 */
+  padding: 16px 20px;
+  cursor: pointer;           /* 鼠标变手型，暗示可点击 */
+  user-select: none;         /* 禁止文字选中（防止双击选中文字） */
+  gap: 12px;                 /* 子元素间距 */
+}
+
+/* 章节序号圆圈 */
+.chapter-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;               /* 圆形 */
+  background-color: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;          /* 数字居中 */
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;                   /* 不让它被压缩 */
+}
+
+/* 章节标题文字 */
+.chapter-title {
+  flex: 1;                 /* 占据剩余空间 */
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* 进度百分比数字 */
+.chapter-percent {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-primary);
+  min-width: 40px;         /* 最小宽度，防止数字变化时跳动 */
+  text-align: right;
+}
+
+/* 展开/收起箭头 */
+.chapter-arrow {
+  font-size: 12px;
+  color: var(--color-text-light);
+  transition: transform 0.3s;  /* 旋转动画 */
+}
+
+/* 展开状态：箭头旋转 180 度（向下变成向上） */
+.chapter-card.open .chapter-arrow {
+  transform: rotate(180deg);
+}
+
+
+/* ---------- 8. 进度条 ----------
+ * 进度条由两层组成：
+ *   - 外层（chapter-progress）：灰色轨道
+ *   - 内层（chapter-progress-fill）：彩色填充
+ * 填充宽度由 JS 动态设置 style="width: X%"
+ * transition 让宽度变化时产生平滑动画 */
+.chapter-progress {
+  height: 4px;
+  background-color: var(--color-progress-bg);  /* 轨道：浅灰色 */
+}
+
+.chapter-progress-fill {
+  height: 100%;                       /* 与轨道同高 */
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-primary-light)
+  );                                   /* 绿色渐变 */
+  /* 初始宽度为 0，JS 会动态设置为实际百分比 */
+  width: 0%;
+  /* transition 解释：
+   * - width：宽度变化时用 0.4s 过渡
+   * - ease-out：先快后慢的缓动曲线，视觉效果更自然 */
+  transition: width 0.4s ease-out;
+}
+
+
+/* ---------- 9. 任务列表 ----------
+ * 折叠动画的核心：用 max-height 从 0 变到一个足够大的值
+ * 为什么用 max-height 而不是 height？
+ *   因为 height: auto 无法产生过渡动画，
+ *   而 max-height 可以。设置一个比实际内容大但合理的值即可。 */
+.chapter-body {
+  max-height: 0;             /* 默认高度为 0 = 收起状态 */
+  overflow: hidden;          /* 超出部分隐藏 */
+  /* transition 只作用于 max-height，0.35s 是动画时长
+   * ease-in-out 让动画开始和结束都平缓 */
+  transition: max-height 0.35s ease-in-out;
+}
+
+/* 展开状态：max-height 设为足够容纳所有任务的值 */
+.chapter-card.open .chapter-body {
+  max-height: 800px;         /* 10+ 个任务也够放 */
+}
+
+/* 任务列表容器 */
+.task-list {
+  padding: 0 20px 16px 20px; /* 上 0，下 16px，左右 20px */
+}
+
+
+/* ---------- 10. 任务项 ----------
+ * 每个任务是一个 <label>，包含自定义复选框 + 文字
+ * 使用 <label> 的好处是点击文字也能触发复选框 */
+.task-item {
+  display: flex;
+  align-items: center;       /* 垂直居中 */
+  padding: 10px 12px;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.task-item:hover {
+  background-color: #f8f9fa; /* hover 时有浅色背景 */
+}
+
+/* 隐藏原生复选框
+ * 不用 display: none（会让它无法被聚焦），
+ * 而是把它移到屏幕外，同时保持可访问性 */
+.task-checkbox {
+  position: absolute;
+  opacity: 0;                /* 透明不可见 */
+  width: 0;
+  height: 0;
+}
+
+/* 自定义复选框外观（用 <span> 模拟） */
+.task-checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;        /* 小圆角 */
+  margin-right: 12px;
+  flex-shrink: 0;            /* 不会因文字过长而被压缩 */
+  position: relative;
+  transition: all 0.2s;
+}
+
+/* 鼠标悬停在任务上时，复选框边框变色 */
+.task-item:hover .task-checkmark {
+  border-color: var(--color-primary);
+}
+
+/* 勾选状态的复选框：背景变绿，边框变绿 */
+.task-checkbox:checked + .task-checkmark {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* 用 CSS 画一个白色对勾
+ * ::after 伪元素 —— 不需要在 HTML 里额外写元素，
+ * 直接用 CSS 生成一个虚拟元素来画对勾 */
+.task-checkbox:checked + .task-checkmark::after {
+  content: "";               /* 伪元素必须有 content */
+  position: absolute;
+  /* 用 border 画对勾的技巧：
+   * 只显示右边和下边，旋转 45 度就变成对勾了 */
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0; /* 只保留右边和下边 */
+  transform: rotate(45deg);   /* 旋转 45 度 → 对勾 */
+}
+
+/* 已完成的任务文字样式：删除线 + 变灰 */
+.task-checkbox:checked ~ .task-text {
+  text-decoration: line-through;
+  color: var(--color-text-light);
+}
+
+/* 任务文字 */
+.task-text {
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+
+/* ---------- 11. 页脚 ---------- */
+.page-footer {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-light);
+  font-size: 13px;
+}
+
+
+/* ---------- 12. 响应式设计 ----------
+ * 在小屏幕（手机）上调整间距和字体大小 */
+@media (max-width: 600px) {
+  .page-container {
+    padding: 20px 12px;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
+  .chapter-header {
+    padding: 12px 16px;
+  }
+
+  .chapter-title {
+    font-size: 14px;
+  }
+
+  .task-list {
+    padding: 0 12px 12px 12px;
+  }
+}
