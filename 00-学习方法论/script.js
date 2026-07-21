@@ -23,7 +23,7 @@ const defaultChapters = [
     expanded: false,
     tasks: [
       { id: "ch00-t1", text: "理解学习循环：阅读 → 模仿 → 默写 → 修改 → 教别人", done: false },
-      { id: "ch00-t2", text: "配置开发环境（Homebrew, Git, Python uv, Node nvm, VS Code）", done: false },
+      { id: "ch00-t2", text: "配置开发环境（Git, Python uv, Node nvm, VS Code）", done: false },
       { id: "ch00-t3", text: "掌握 Git 基本命令 + Conventional Commits 规范", done: false },
       { id: "ch00-t4", text: "学会使用命令行终端 + AI 辅助编程的正确姿势", done: false },
       { id: "ch00-t5", text: "【项目】搭建学习看板（HTML+CSS+JS）并部署到 GitHub Pages", done: false },
