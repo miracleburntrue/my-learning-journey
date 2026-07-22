@@ -17,7 +17,7 @@
 | 模块 | 内容 | 状态 |
 |------|------|------|
 | 00 学习方法论 | 环境搭建 + Git + 学习看板搭建 | ✅ 已完成 |
-| 01 Python 从零到源码 | 语法 → 面向对象 → 异步 → CPython 源码 | ⬜ 待开始 |
+| 01 Python 从零到源码 | 语法 → 面向对象 → 异步 → CPython 源码 | 🚧 进行中 |
 | 02 JavaScript 从零到源码 | 语法 → this/闭包/原型 → 手写 Promise → V8 | ⬜ 待开始 |
 | 03 HTML/CSS 现代 Web | 语义化 → Flex/Grid → Tailwind → 像素级还原 | ⬜ 待开始 |
 | 04 React 前端框架 | Hooks → Next.js → 手写 mini-react → 协作白板 | ⬜ 待开始 |
