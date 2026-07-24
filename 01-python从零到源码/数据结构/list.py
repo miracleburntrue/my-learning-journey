@@ -1,7 +1,7 @@
 '''
 列表的基础知识汇总
 '''
-from copy import deepcopy as dp
+from copy import deepcopy as dp  # noqa: I001
 #创建与索引
 list = ["苹果","梨子","666",1000]
 print(list[1]) #列表的正向索引从0开始
