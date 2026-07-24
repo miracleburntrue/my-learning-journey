@@ -23,3 +23,7 @@ print(set_a ^ set_b) #对称差
 set_empty.add(1) #增
 set_empty.discard(2) #删，不存在不会报错
 set_empty.remove(1) #删，不存在会报错
+#不可变集合frozenset
+fs = frozenset([1,2,3])
+#fs.add(4) #会报错，frozenset不可修改
+#可以作为键加入dict、可以放进set
