@@ -8,7 +8,7 @@ my_dict["area"] = "M78星云" #新增
 print(my_dict)
 del my_dict["性别"] #删除
 print(my_dict)
-my_dict = dict([('小明',100),('小红',80)]) #使用dict()函数构建字典
+my_dict = dict([('小明',100),('小红',80)])  # 使用dict()函数构建字典  # noqa
 print(my_dict)
 
 #字典的遍历
